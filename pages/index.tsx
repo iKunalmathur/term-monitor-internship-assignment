@@ -1,5 +1,5 @@
 import { GetStaticProps } from "next";
-import React from "react";
+import React, { useState } from "react";
 import Layout from "../Component/Layout";
 
 export const getStaticProps: GetStaticProps = async (context) => {
@@ -15,14 +15,14 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
   return {
     props: {
-      terms: data,
+      data,
     },
-    revalidate:60
+    revalidate: 60,
   };
 };
 
 interface HomeProps {
-  terms: [
+  data: [
     {
       id: number;
       keyword: string;
@@ -33,7 +33,15 @@ interface HomeProps {
   ];
 }
 
-export default function Home({ terms }: HomeProps) {
+export default function Home({ data }: HomeProps) {
+  const [terms, setTerms] = useState<Object[]>(data);
+
+  // remove term form array
+  const removeTerm = (id: number) => {
+    const newTerms = terms.filter((term: any) => term.id !== id);
+    setTerms(newTerms);
+  };
+
   return (
     <Layout>
       <main className="spacer-lg-y">
@@ -88,9 +96,9 @@ export default function Home({ terms }: HomeProps) {
               </tr>
             </thead>
             <tbody>
-              {/* loop and show data */}
+              {/* Start loop and show data */}
               {terms &&
-                terms.map((term) => (
+                terms.map((term: any) => (
                   <tr key={term.id}>
                     <td>{term.keyword}</td>
                     <td>
@@ -100,7 +108,12 @@ export default function Home({ terms }: HomeProps) {
                     <td>{term.matches}</td>
                     <td>{term.search_status}</td>
                     <td>
-                      <button className="icon-btn">
+                      <button
+                        className="icon-btn"
+                        onClick={(e) => {
+                          removeTerm(term.id);
+                        }}
+                      >
                         <i
                           className="fas fa-circle fa-2x"
                           aria-hidden="true"
