@@ -115,9 +115,8 @@ export default function Home({ data }: HomeProps) {
                         }}
                       >
                         <i
-                          className="fas fa-circle fa-2x"
+                          className="fas fa-trash fa-lg"
                           aria-hidden="true"
-                          style={{ color: "#C4C4C4" }}
                         ></i>
                       </button>
                     </td>
